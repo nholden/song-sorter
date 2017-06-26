@@ -5,12 +5,12 @@ require 'selenium-webdriver'
 class SongSorter
 
   def initialize(songs_file_path)
+    spotify_authenticate
     @songs_file_path = songs_file_path
     @yes_songs = File.open('yes_songs.txt', 'a')
     @no_songs = File.open('no_songs.txt', 'a')
     @maybe_songs = File.open('maybe_songs.txt', 'a')
     @driver = Selenium::WebDriver.for :chrome
-    RSpotify.authenticate(ENV.fetch('SPOTIFY_CLIENT_ID'), ENV.fetch('SPOTIFY_CLIENT_SECRET'))
   end
 
   def run
@@ -23,6 +23,16 @@ class SongSorter
     end
 
     puts "🎉 🍻  Done! 🎉 🍻"
+  end
+
+  private
+
+  def spotify_authenticate
+    if [ENV['SPOTIFY_CLIENT_ID'], ENV['SPOTIFY_CLIENT_SECRET']].any? { |var| var.nil? || var == '' }
+      raise 'Spotify client ID and secret must be set in .env'
+    end
+
+    RSpotify.authenticate(ENV.fetch('SPOTIFY_CLIENT_ID'), ENV.fetch('SPOTIFY_CLIENT_SECRET'))
   end
 
   def play_song(song)
