@@ -2,7 +2,7 @@ require 'rspotify'
 require 'dotenv/load'
 require 'selenium-webdriver'
 
-class SongList
+class SongSorter
 
   def initialize(songs_file_path)
     @songs_file_path = songs_file_path
@@ -60,4 +60,4 @@ class SongList
 
 end
 
-SongList.new('songs.txt').run
+SongSorter.new('songs.txt').run
